@@ -74,11 +74,14 @@ public class PostgresSource {
     public void open() throws SourceException {
         try {
             String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+		/*
             Properties props = new Properties();
             props.setProperty("user", user);
             props.setProperty("password", password);
-            // props.setProperty("ssl","true");
+            //props.setProperty("ssl","true");
             connection = DriverManager.getConnection(url, props);
+	    */
+	    connection = DriverManager.getConnection(url, user, password);
             connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new SourceException("Opening PostgreSQL connection failed: " + e.getMessage(), e);

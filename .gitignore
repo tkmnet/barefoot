@@ -1,3 +1,4 @@
+local/
 internal/
 doc/
 target/
@@ -14,3 +15,9 @@ target/
 *.log
 *.aux
 *~
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
