@@ -131,6 +131,21 @@ public class MatcherServer extends AbstractServer {
     }
 
     /**
+     * Output formatter for writing map matched positions, represented be road id and fraction, and
+     * the geometry of the routes into a JSON response message.
+     */
+    public static class GiSlimJSONOutputFormatter extends OutputFormatter {
+        @Override
+        public String format(String request, MatcherKState output) {
+            try {
+                return output.toGiSlimJSON().toString();
+            } catch (JSONException e) {
+                throw new RuntimeException("creating JSON response");
+            }
+        }
+    }
+
+    /**
      * Output formatter for writing the geometries of a map matched paths into GeoJSON response
      * message.
      */
@@ -184,6 +199,8 @@ public class MatcherServer extends AbstractServer {
                                 return new GeoJSONOutputFormatter().format(request, output);
                             case "debug":
                                 return new DebugJSONOutputFormatter().format(request, output);
+                            case "gislimjson":
+                                return new GiSlimJSONOutputFormatter().format(request, output);
                             default:
                                 break;
                         }

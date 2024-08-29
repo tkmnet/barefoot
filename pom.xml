@@ -157,6 +157,12 @@
 			<groupId>org.zeromq</groupId>
 			<artifactId>jeromq</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.3.0-jre</version>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

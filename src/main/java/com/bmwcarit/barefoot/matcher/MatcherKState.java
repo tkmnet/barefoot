@@ -13,6 +13,8 @@
 
 package com.bmwcarit.barefoot.matcher;
 
+import com.bmwcarit.barefoot.util.TrailArray;
+import com.google.common.collect.EvictingQueue;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,8 @@ import com.bmwcarit.barefoot.roadmap.RoadMap;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.WktExportFlags;
+
+import java.util.ArrayList;
 
 /**
  * <i>k</i>-State data structure wrapper of {@link KState} for organizing state memory in HMM map
@@ -131,6 +135,32 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
         output.append(jsonsequence.toString());
 
         return output.toString();
+    }
+
+    /**
+     * Gets {@link JSONArray} of {@link MatcherKState} with map matched positions, represented by
+     * road id and fraction, and the geometry of the routes.
+     *
+     * @return {@link JSONArray} of {@link MatcherKState} with map matched positions, represented by
+     *         road id and fraction, and the geometry of the routes.
+     * @throws JSONException thrown on JSON extraction or parsing error.
+     */
+    public JSONArray toGiSlimJSON() throws JSONException {
+        JSONArray json = new JSONArray();
+        TrailArray trailArray = new TrailArray();
+        if (this.sequence() != null) {
+            EvictingQueue<Object> history = EvictingQueue.create(2);
+            for (MatcherCandidate candidate : this.sequence()) {
+                JSONObject jsoncandidate = candidate.point().toJSON();
+                if (candidate.transition() != null) {
+                    jsoncandidate.put("route",
+                            GeometryEngine.geometryToWkt(candidate.transition().route().geometry(),
+                                    WktExportFlags.wktExportLineString));
+                }
+                json.put(jsoncandidate);
+            }
+        }
+        return json;
     }
 
     /**
