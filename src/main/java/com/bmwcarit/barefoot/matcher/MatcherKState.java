@@ -151,6 +151,7 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
         if (this.sequence() != null) {
             EvictingQueue<Object> history = EvictingQueue.create(2);
             for (MatcherCandidate candidate : this.sequence()) {
+		trailArray.record(candidate);
                 JSONObject jsoncandidate = candidate.point().toJSON();
                 if (candidate.transition() != null) {
                     jsoncandidate.put("route",
@@ -160,6 +161,7 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
                 json.put(jsoncandidate);
             }
         }
+	json.put(trailArray.toJSON());
         return json;
     }
 
