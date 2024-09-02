@@ -30,6 +30,7 @@ public class TrailArray extends ArrayList<Long> {
     public JSONArray getAround(MatcherCandidate candidate) {
         MatcherTransition transition = candidate.transition();
         if (transition != null && transition.route() != null && transition.route().path().size() > 0) {
+	    gettingAroundCursor += transition.route().path().size() -1;
        	    if (transition.route().path().size() == 2) {
             }
         }

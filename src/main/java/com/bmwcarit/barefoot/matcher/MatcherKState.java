@@ -152,12 +152,15 @@ public class MatcherKState extends KState<MatcherCandidate, MatcherTransition, M
             EvictingQueue<Object> history = EvictingQueue.create(2);
             for (MatcherCandidate candidate : this.sequence()) {
 		trailArray.record(candidate);
+	    }
+            for (MatcherCandidate candidate : this.sequence()) {
                 JSONObject jsoncandidate = candidate.point().toJSON();
                 if (candidate.transition() != null) {
                     jsoncandidate.put("route",
                             GeometryEngine.geometryToWkt(candidate.transition().route().geometry(),
                                     WktExportFlags.wktExportLineString));
                 }
+		jsoncandidate.put("sub", trailArray.getAround(candidate));
                 json.put(jsoncandidate);
             }
         }
